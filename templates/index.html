@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Tic Tac Toe</h1>
+      <section class="panel">
+        <form method="post" action="/start" class="player-form">
+          <label>
+            Player X name:
+            <input type="text" name="x_player" value="{{ game.players['X'] }}" required />
+          </label>
+          <label>
+            Player O name:
+            <input type="text" name="o_player" value="{{ game.players['O'] }}" required />
+          </label>
+          <button type="submit">Start / Restart Game</button>
+        </form>
+      </section>
+      <section class="panel status-panel">
+        <div class="status">{{ game.status }}</div>
+      </section>
+      <section class="panel scoreboard-panel">
+        <h2>Session Scoreboard</h2>
+        <div class="scores">
+          <div class="score-item">
+            <span class="player-name">{{ game.players['X'] }}</span>
+            <span class="player-score">{{ game.scores['X'] }} wins</span>
+          </div>
+          <div class="score-item">
+            <span class="player-name">{{ game.players['O'] }}</span>
+            <span class="player-score">{{ game.scores['O'] }} wins</span>
+          </div>
+        </div>
+      </section>
+      <section class="board-panel">
+        <form method="post" action="/move" class="board-grid">
+          {% for index, value in board %}
+          <button
+            type="submit"
+            name="index"
+            value="{{ index }}"
+            class="cell{{ ' disabled' if value or not game.game_active else '' }}"
+            {% if value or not game.game_active %}disabled{% endif %}
+          >
+            {{ value }}
+          </button>
+          {% endfor %}
+        </form>
+      </section>
+      <section class="panel controls">
+        <form method="post" action="/reset" class="inline-form">
+          <input type="hidden" name="reset_type" value="round" />
+          <button type="submit">New Round</button>
+        </form>
+        <form method="post" action="/reset" class="inline-form">
+          <input type="hidden" name="reset_type" value="scores" />
+          <button type="submit">Reset Scores</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
